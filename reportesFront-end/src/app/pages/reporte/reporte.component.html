@@ -1,0 +1,52 @@
+
+<!--<h3>Padre componente</h3>
+<h3>{{nombrepadre}}</h3>
+<button class="btn btn-primary"
+(click)="cambiarnombre()"
+> Cambiar nombre</button>
+<app-visualizar [fechahija1]="nombrepadre"></app-visualizar>-->
+
+<mat-toolbar>Consultar Reportes</mat-toolbar>
+  <router-outlet></router-outlet>
+
+
+<!--<div [hidden]="route.children.length !== 0">-->
+
+ <div class="example-containe mat-elevation-z8">
+   <form method="POST">
+    <mat-form-field appearance="fill">
+      <mat-label>Seleccione Reporte</mat-label>
+      <mat-select [(ngModel)]="selectedValue" name="Reportes">
+        <mat-option *ngFor="let r of reportes" [value]="r.nombre_descarga">
+          {{r.nombre_reporte}}
+        </mat-option>
+     </mat-select>
+    </mat-form-field>
+    <p> Seleccion de Reporte: {{selectedValue}} </p>
+
+
+    <mat-form-field>
+      <input matInput [matDatepicker]="picker" placeholder="Escoge una fecha" [max]="maxFecha"
+          [(ngModel)]="fechaSeleccionada" (dateChange)="cambieFecha($event.target.value)" >
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>      
+  </mat-form-field>
+  
+
+
+   
+
+
+    <button mat-raised-button color="primary" (click)="aceptar()"
+     [routerLink]="[selectedValue,1]">Aceptar</button>
+   
+     <textarea  onChange={cambioTexto} 
+     [(ngModel)]="mensaje" style="width: 300px; height: 200px"></textarea>
+  </form>
+</div>
+
+  
+<!--</div>  https://www.youtube.com/watch?v=w5cCsoOs8SI
+  <textarea (input)="cambioTexto($event.target.value)" -->
+  <app-visualizar></app-visualizar>
+
