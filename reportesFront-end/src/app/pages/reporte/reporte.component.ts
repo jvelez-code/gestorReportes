@@ -1,13 +1,17 @@
-import { Component, EventEmitter, Output, OnInit } from '@angular/core';
+import { Component, EventEmitter, Output, OnInit, ViewChild } from '@angular/core';
 import { Reportes } from '../../_model/reportes';
 import { CityI } from '../../_model/cityI';
 import { ReporteService } from '../../_services/reporte.service';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Observable, EMPTY } from 'rxjs';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import {FormsModule} from '@angular/forms';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import * as moment from 'moment';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { switchMap } from 'rxjs/operators';
 
 
 @Component({
@@ -16,6 +20,10 @@ import * as moment from 'moment';
   styleUrls: ['./reporte.component.css']
 })
 export class ReporteComponent implements OnInit {
+
+  displayedColumns = ['id', 'nombre', 'descarga', 'acciones'];
+  dataSource !: MatTableDataSource<Reportes>;
+
 
   mensaje !: string;
   nombrepadre :string ="Sin nombre";
@@ -39,17 +47,22 @@ export class ReporteComponent implements OnInit {
   
 
 
-  constructor( private reporteService : ReporteService,
-               public route: ActivatedRoute) { }
+  constructor( 
+               private reporteService : ReporteService,
+               public route: ActivatedRoute,
+               private snackBar: MatSnackBar
+               ) { }
 
   ngOnInit(): void {
 
     
      this.reporteService.listar().subscribe(data => {
       console.log(data)
-      this.reportes = data;
+      this.dataSource = new MatTableDataSource(data);
+    
     });
 
+    
    
   }
 
@@ -92,3 +105,4 @@ export class ReporteComponent implements OnInit {
 
    
 }
+

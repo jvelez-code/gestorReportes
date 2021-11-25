@@ -6,23 +6,27 @@ const { inicio,
         getReportesid, 
         getEstados,
         getReportesGestion,
-        postReportesGestion
+        postReportesGestion,
+        postDetalleGestiones,
+        getmonitoreo
 } = require ('../controllers/reportes');
 
 const router = Router();
 
 //gestorclientes
 router.get('/', inicio );
-router.get('/reportes', getReportes );
-router.get('/reportes/:id', getReportesid );
+router.get('/repo/reportes', getReportes );
+router.get('/repo/reportes/:id', getReportesid );
 router.post('/reportes', postReportes );
-router.get('/gestion', getReportesGestion );
+router.get('/repo/gestion', getReportesGestion );
 router.post('/gestion', postReportesGestion );
+router.post('/detallegestiones', postDetalleGestiones );
 
 
 
 //contaccenter
 router.get('/estados', getEstados );
+router.get('/moni/monitoreo', getmonitoreo );
 
 
 

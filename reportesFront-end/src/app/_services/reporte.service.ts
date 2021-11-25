@@ -24,11 +24,11 @@ export class ReporteService {
   constructor(private http: HttpClient) { }
  
     listar(){
-      return this.http.get<Reportes[]>(`${this.url}/reportes`);
+      return this.http.get<Reportes[]>(`${this.url}/repo/reportes`);
     }
 
     listarId(id: number){
-      return this.http.get<Reportes>(`${this.url}/reportes/${id}`);
+      return this.http.get<Reportes>(`${this.url}/repo/reportes/${id}`);
 
     }
   
