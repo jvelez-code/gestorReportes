@@ -17,6 +17,10 @@ import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 })
 export class DetalleGestionComponent implements OnInit {
 
+
+  fechaSeleccionada : Date = new Date;
+  fechaSeleccionadas : Date = new Date;
+
   campaignOne!: FormGroup;
   campaignTwo!: FormGroup;
 
