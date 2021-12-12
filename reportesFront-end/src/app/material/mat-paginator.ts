@@ -4,11 +4,11 @@ import { Injectable } from '@angular/core';
 @Injectable() //> v9
 export class MatPaginatorImpl extends MatPaginatorIntl{
 
-    itemsPerPageLabel = 'Items por página';
-    nextPageLabel = 'Siguiente';
-    previousPageLabel = 'Atrás';
+    override itemsPerPageLabel = 'Items por página';
+    override nextPageLabel = 'Siguiente';
+    override previousPageLabel = 'Atrás';
 
-    getRangeLabel = function (page: number, pageSize: number, length: number) {
+    override getRangeLabel = function (page: number, pageSize: number, length: number) {
         if (length === 0 || pageSize === 0) {
             return '0 de ' + length;
         }

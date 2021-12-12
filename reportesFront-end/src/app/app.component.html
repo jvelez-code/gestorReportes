@@ -5,7 +5,7 @@
           <mat-icon *ngIf="sidenav.opened">close</mat-icon>
       </button>
 
-      <h1 class="example-app-name">MEDIAPP</h1>
+      <h1 class="example-app-name">Gestor Clientes</h1>
 
       <span class="example-spacer"></span>
 
@@ -28,16 +28,24 @@
   <mat-sidenav-container class="example-sidenav-container">
       <mat-sidenav #sidenav style="width: 200px" mode="push">
           <img src="assets/mitocode.png" width="128" style="margin-left: 20px">
-    
+          
           <button mat-menu-item (click)="sidenav.toggle()" routerLink="/reporte" style="cursor: pointer">
               <mat-icon>search</mat-icon>
               <span>Buscar</span>
           </button>
+
+          <mat-divider></mat-divider>
+          <button mat-menu-item (click)="sidenav.toggle()" routerLink="/monitoreo" style="cursor: pointer">
+              <mat-icon>accessibility</mat-icon>
+              <span>Monitoreo</span>
+          </button>
+  
           <mat-divider></mat-divider>
           <button mat-menu-item (click)="sidenav.toggle()" routerLink="/grafico" style="cursor: pointer">
-              <mat-icon>accessibility</mat-icon>
+              <mat-icon>addchart</mat-icon>
               <span>Graficos</span>
           </button>
+         
           <mat-divider></mat-divider>
           <button mat-menu-item (click)="sidenav.toggle()" routerLink="/reporte" style="cursor: pointer">
               <mat-icon>assessment</mat-icon>
@@ -52,3 +60,4 @@
   </mat-sidenav-container>
 
 </div>
+<ngx-charts-legend></ngx-charts-legend>

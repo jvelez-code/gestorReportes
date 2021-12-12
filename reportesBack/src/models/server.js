@@ -8,6 +8,12 @@ class Server{
     constructor(){
         this.app = express();
         this.port = process.env.PORT;
+        this.server = require('http').createServer(this.app);
+        this.io = require('socket.io')(this.server,{
+            cors: {
+                origins: ['http://localhost:4200']
+            }
+        });
 
         // Middlewares
         this.middlewares();
@@ -26,13 +32,32 @@ class Server{
     }
 
     middlewares(){
-        this.app.use(express.json());
-        this.app.use(express.urlencoded({extended: false}));
-        this.app.use(cors());
+       // CORS
+       this.app.use( cors() );
+
+       // Lectura y parseo del body
+       this.app.use( express.json() );
+       this.app.use( express.urlencoded({extended: false}));
+
+       // Directorio Público
+       this.app.use( express.static('public') );
     }
 
+    
+
+    socket() {
+        this.io.on('connection',socket => {
+        console.log('Cliente concectado', socket.id);
+    
+        socket.on('disconnect',()=>{
+        console.log('Cliente desconcectado', socket.id);    
+        })    
+        });         
+        }
+
     listen(){
-        this.app.listen(this.port,()=>{
+        //this.app.listen(this.port,()=>{
+            this.server.listen(this.port,()=>{
             console.log("Corriendo en puerto",this.port )
     });
     }

@@ -1,11 +1,14 @@
-import { Component, OnInit, Input} from '@angular/core';
-import { Reportes } from '../../../_model/reportes';
+import { Component, OnInit, Input, ViewChild} from '@angular/core';
 import { ReporteService } from '../../../_services/reporte.service';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { ActivatedRoute,  Router } from '@angular/router';
 import { Gestion } from '../../../_model/gestion';
 import { MatTableDataSource } from '@angular/material/table';
 import { CityI } from '../../../_model/cityI';
+import { Parametros } from 'src/app/_model/parametros';
 import * as moment from 'moment';
+import { FormControl, FormGroup } from '@angular/forms';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
 
 
 @Component({
@@ -15,84 +18,82 @@ import * as moment from 'moment';
 })
 export class DetalleGestionComponent implements OnInit {
 
+
+  fechaInicio : Date = new Date;
+  fechaFin : Date = new Date;
+  form!: FormGroup;
+  reported : string ="jaime velez"
+
+  campaignOne!: FormGroup;
+  campaignTwo!: FormGroup;
+
   mensaje !: string;
   gestion !: Gestion[];
-  cities !: CityI;
-  displayedColumns: string[] = ['id_gestion', 'id_campana', 'id_agente', 'fecha_gestion'];
+  parametros !: Parametros;
+  displayedColumns: string[] = ['campana', 'tipo', 'documento', 'razonSocial'];
   dataSource!: MatTableDataSource<Gestion>;
-  //displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-  //dataSource = this.gestion;
-  
-  id!: number;
-  @Input() 
-  fechahija1 : string="Sin nombre";
- 
-  fechanueva !:  string;
- 
- 
-  campana !:  string;
-  get bar(): string {
-    return this.campana;
-   }
-  set bar(value: string) {
-    this.campana = value;
-    }
+  @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
+  fechaInicios !: any;
+  fechaFins !: any;
   fechaparametro1 !:  string;
   fechaparametro2 !:  string;
   
 
   constructor( private reporteService : ReporteService, 
                private route: ActivatedRoute,
-               private router: Router) { }
+               private router: Router) 
+               { 
+                const today = new Date();
+                const month = today.getMonth();
+                const year = today.getFullYear();
+            
+                this.campaignOne = new FormGroup({
+                  start: new FormControl(new Date(year, month, 13)),
+                  end: new FormControl(new Date(year, month, 16)),
 
+                });
+
+                  this.campaignTwo = new FormGroup({
+                    start: new FormControl(new Date(year, month, 15)),
+                    end: new FormControl(new Date(year, month, 19)),
+                  });
+               }
+               
+             
   ngOnInit(): void {
+     
+    }
 
-    this.reporteService.enviarmensajeObservable.subscribe(data => {
-      this.mensaje =data;
-      this.fechaparametro1 = moment(this.mensaje).format('YYYY-MM-DD 00:00:01');
-      this.fechaparametro2='2021-11-01 00:00:00';
-      console.log("parametros3"+ this.fechaparametro2);
-      const cities= {fecha:this.fechaparametro1, fechafin:this.fechaparametro2}
-     // console.log("Hola mundo1: " + cities.fecha)
-     //cities son los paramatros que enviamos y node.js los toma en el header
-     this.reporteService.listarGestionxfecha(cities).subscribe(data=>{
-      this.dataSource = new MatTableDataSource(data);
-     });
-    });
+    aceptar(){    
+        this.fechaparametro1 = moment(this.fechaInicio).format('YYYY-MM-DD 00:00:01');
+        this.fechaparametro2 = moment(this.fechaFin).format('YYYY-MM-DD 23:59:59');
 
-    this.reporteService.disparadorreportes.
-    subscribe((data: any) => {
-      console.log("prueba: "+data.fecha);
-      this.campana='2838'
-    });
-    
-    console.log("this: " +this.campana)
-    /*{
-      this.fechanueva = data.fecha
-      this.campana = data.fechafin
-      console.log("parametros1"+ this.fechanueva);
-      console.log("parametros2"+ this.campana);
-    })   */
-    
+     
+        const parametros= {fechaini:this.fechaparametro1, fechafin:this.fechaparametro2}
+       //parametros son los paramatros que enviamos y node.js los toma en el header
+        this.reporteService.reporDetalleGestiones(parametros).subscribe(data=>{
+        console.log(data);
+        this.dataSource = new MatTableDataSource(data);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+  
+      });    }
+
+      filtrar(valor: string) {
+        this.dataSource.filter = valor.trim().toLowerCase();
+      }
+  
    
 
 
 
 
 
-    /*toma el parametro de la ruta url
-    this.route.params.subscribe((data: Params) => {
-      this.id = data['id'];
-    });
-
-    this.reporteService.listarId(this.id).subscribe(data => {
-      console.log(data);
-    })*/
-
-   
     
   }
 
  
-}
+
+

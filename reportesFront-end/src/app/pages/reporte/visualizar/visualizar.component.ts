@@ -46,53 +46,6 @@ export class VisualizarComponent implements OnInit {
                private route: ActivatedRoute,
                private router: Router) { }
 
-  ngOnInit(): void {
-
-    this.reporteService.enviarmensajeObservable.subscribe(data => {
-      this.mensaje =data;
-      this.fechaparametro1 = moment(this.mensaje).format('YYYY-MM-DD 00:00:01');
-      this.fechaparametro2='2021-11-01 00:00:00';
-      console.log("parametros3"+ this.fechaparametro2);
-      const cities= {fecha:this.fechaparametro1, fechafin:this.fechaparametro2}
-     // console.log("Hola mundo1: " + cities.fecha)
-     //cities son los paramatros que enviamos y node.js los toma en el header
-     this.reporteService.listarGestionxfecha(cities).subscribe(data=>{
-      this.dataSource = new MatTableDataSource(data);
-     });
-    });
-
-    this.reporteService.disparadorreportes.
-    subscribe((data: any) => {
-      console.log("prueba: "+data.fecha);
-      this.campana='2838'
-    });
-    
-    console.log("this: " +this.campana)
-    /*{
-      this.fechanueva = data.fecha
-      this.campana = data.fechafin
-      console.log("parametros1"+ this.fechanueva);
-      console.log("parametros2"+ this.campana);
-    })   */
-    
-   
-
-
-
-
-
-    /*toma el parametro de la ruta url
-    this.route.params.subscribe((data: Params) => {
-      this.id = data['id'];
-    });
-
-    this.reporteService.listarId(this.id).subscribe(data => {
-      console.log(data);
-    })*/
-
-   
-    
-  }
-
+  ngOnInit(): void {  }
  
 }

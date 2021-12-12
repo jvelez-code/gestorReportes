@@ -1,5 +1,5 @@
 export interface Parametros{
-    fecha ?: string;
+    fechaini ?: string;
     fechafin ?: string;
     usuario ?: string;
     empresa ?: string;

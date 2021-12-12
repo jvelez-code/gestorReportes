@@ -24,6 +24,9 @@ import { MatListModule } from '@angular/material/list';
 //archivos locales
 import { CustomDateAdapter } from './custom-adapter';
 import { MatPaginatorImpl } from './mat-paginator';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+ 
 
 
 
@@ -55,7 +58,9 @@ import { MatPaginatorImpl } from './mat-paginator';
     MatDatepickerModule,
     MatNativeDateModule,
     MatExpansionModule,
-    MatListModule
+    MatListModule,
+    NgxChartsModule,
+    BrowserAnimationsModule
   ],
   providers: [
     { provide: MatPaginatorIntl, useClass: MatPaginatorImpl },

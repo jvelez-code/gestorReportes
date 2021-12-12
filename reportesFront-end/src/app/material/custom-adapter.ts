@@ -3,7 +3,7 @@ import { NativeDateAdapter } from '@angular/material/core';
 //https://stackoverflow.com/questions/58132292/angular-material-datepicker-input-format
 export class CustomDateAdapter extends NativeDateAdapter {
 
-    parse(value: any): Date | null {
+    override parse(value: any): Date | null {
 
     if ((typeof value === 'string') && (value.indexOf('/') > -1)) {
        const str = value.split('/');
@@ -18,7 +18,7 @@ export class CustomDateAdapter extends NativeDateAdapter {
     return isNaN(timestamp) ? null : new Date(timestamp);
   }
 
-  format(date: Date, displayFormat: Object): string {
+  override format(date: Date, displayFormat: Object): string {
     date = new Date(Date.UTC(
       date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(),
       date.getMinutes(), date.getSeconds(), date.getMilliseconds()));
