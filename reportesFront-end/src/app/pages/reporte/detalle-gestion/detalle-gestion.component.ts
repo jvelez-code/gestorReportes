@@ -1,13 +1,14 @@
-import { Component, OnInit, Input} from '@angular/core';
-import { Reportes } from '../../../_model/reportes';
+import { Component, OnInit, Input, ViewChild} from '@angular/core';
 import { ReporteService } from '../../../_services/reporte.service';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { ActivatedRoute,  Router } from '@angular/router';
 import { Gestion } from '../../../_model/gestion';
 import { MatTableDataSource } from '@angular/material/table';
 import { CityI } from '../../../_model/cityI';
+import { Parametros } from 'src/app/_model/parametros';
 import * as moment from 'moment';
 import { FormControl, FormGroup } from '@angular/forms';
-import { MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
 
 
 @Component({
@@ -18,20 +19,24 @@ import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 export class DetalleGestionComponent implements OnInit {
 
 
-  fechaSeleccionada : Date = new Date;
-  fechaSeleccionadas : Date = new Date;
+  fechaInicio : Date = new Date;
+  fechaFin : Date = new Date;
+  form!: FormGroup;
+  reported : string ="jaime velez"
 
   campaignOne!: FormGroup;
   campaignTwo!: FormGroup;
 
   mensaje !: string;
   gestion !: Gestion[];
-  cities !: CityI;
-  displayedColumns: string[] = ['id_gestion', 'id_campana', 'id_agente', 'fecha_gestion'];
+  parametros !: Parametros;
+  displayedColumns: string[] = ['campana', 'tipo', 'documento', 'razonSocial'];
   dataSource!: MatTableDataSource<Gestion>;
+  @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  fechaInicio !: any;
-  fechaFin !: any;
+  fechaInicios !: any;
+  fechaFins !: any;
   fechaparametro1 !:  string;
   fechaparametro2 !:  string;
   
@@ -61,31 +66,24 @@ export class DetalleGestionComponent implements OnInit {
      
     }
 
-    events: string[] = [];
-
-    addEvent(type: string, event: MatDatepickerInputEvent<Date>) {
-      this.events.push(`${type}: ${event.value}`);
-      this.fechaInicio=event.value
-    }
-
-    aceptar(){
-    
+    aceptar(){    
         this.fechaparametro1 = moment(this.fechaInicio).format('YYYY-MM-DD 00:00:01');
-        this.fechaparametro2='2021-11-01 00:00:00';
-        console.log("parametros3"+ this.fechaparametro1);
-        const cities= {fecha:this.fechaparametro1, fechafin:this.fechaparametro2}
-       // console.log("Hola mundo1: " + cities.fecha)
-       //cities son los paramatros que enviamos y node.js los toma en el header
+        this.fechaparametro2 = moment(this.fechaFin).format('YYYY-MM-DD 23:59:59');
 
-       console.log(cities);
-       this.reporteService.listarGestionxfecha(cities).subscribe(data=>{
-         console.log(data);
+     
+        const parametros= {fechaini:this.fechaparametro1, fechafin:this.fechaparametro2}
+       //parametros son los paramatros que enviamos y node.js los toma en el header
+        this.reporteService.reporDetalleGestiones(parametros).subscribe(data=>{
+        console.log(data);
         this.dataSource = new MatTableDataSource(data);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
   
-      }); 
+      });    }
 
-    }
-
+      filtrar(valor: string) {
+        this.dataSource.filter = valor.trim().toLowerCase();
+      }
   
    
 

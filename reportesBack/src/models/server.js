@@ -9,7 +9,11 @@ class Server{
         this.app = express();
         this.port = process.env.PORT;
         this.server = require('http').createServer(this.app);
-        this.io = require('socket.io')(this.server);
+        this.io = require('socket.io')(this.server,{
+            cors: {
+                origins: ['http://localhost:4200']
+            }
+        });
 
         // Middlewares
         this.middlewares();
@@ -39,13 +43,14 @@ class Server{
        this.app.use( express.static('public') );
     }
 
+    
 
     socket() {
         this.io.on('connection',socket => {
-        console.log('Cliete concectado', socket.id);
+        console.log('Cliente concectado', socket.id);
     
         socket.on('disconnect',()=>{
-        console.log('Cliete desconcectado', socket.id);    
+        console.log('Cliente desconcectado', socket.id);    
         })    
         });         
         }

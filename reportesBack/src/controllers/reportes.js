@@ -32,7 +32,10 @@ const inicio =((req, res) => {
 
 const getmonitoreo = async(req, res)=>{
     try {
-        const response = await poolcont.query(`select  * from ask_estado_extension`);
+        const response = await poolcont.query(`select id_extension, login_agente, descripcion ,
+        fechahora_inicio_Estado , now()-fechahora_inicio_Estado as total
+        from ask_estado_extension aee ,ask_estado ae
+        where aee.estado=ae.id_estado AND empresa='ASISTIDA' ORDER BY ae.id_estado`);
         if (res !== undefined) {
             return res.json(response.rows);
             
@@ -45,10 +48,10 @@ const getmonitoreo = async(req, res)=>{
 const postDetalleGestiones= async (req, res) =>{
 try {
      
-    let fecha=req.body.fecha
-    let fecha2=req.body.fechafin   
-    console.log(fecha);
-    console.log(fecha2);
+    let fechaini=req.body.fechaini
+    let fechafin=req.body.fechafin   
+    console.log(fechaini);
+    console.log(fechafin);
     const response = await pool.query(`SELECT
     CAST(c.id_campana as varchar) || '_' || c.nombre as nombreCampana,
     clte.tipo_documento as tipoDocAportante,
@@ -64,7 +67,7 @@ try {
     emp.descripcion as empresa,
     egpdg.nombre as padreTipificacion,
     egdg.nombre as tipificacion,
-    dg.fecha_gestion as fechaGestion,
+    g.fecha_gestion as fechaGestion,
     c.id_campana as numeroCampana,
     replace(replace(replace(replace(replace(replace(dg.observacion,chr(10), ' '),chr(11),' '),chr(13),' '),chr(27),' '),chr(32),' '),chr(39),' ') as observacion,
     g.id_gestion as idGestion
@@ -78,9 +81,9 @@ try {
     INNER JOIN cliente clte ON g.id_cliente=clte.id_cliente
     LEFT OUTER JOIN contacto cont ON g.id_gestion = cont.id_gestion AND clte.id_cliente = cont.id_cliente
     LEFT JOIN usuario ag ON dg.id_agente=ag.id_usuario
-    INNER JOIN empresa emp ON ag.empresa=emp.id_empresa AND emp.pseudonimo='CONTACT'
-    
-    ORDER BY g.fecha_gestion limit 4`);
+    INNER JOIN empresa emp ON ag.empresa=emp.id_empresa 
+    WHERE g.fecha_gestion BETWEEN ($1) AND ($2) AND emp.pseudonimo='CONTACT'
+    ORDER BY g.fecha_gestion `,[fechaini , fechafin]);
     if (res !== undefined) {
         return res.json(response.rows);
         
@@ -135,7 +138,8 @@ const getReportesGestion = async (req, res) =>{
 
 const getReportes = async (req, res) =>{
     try {
-        const response = await pool.query('SELECT * FROM reportes where id between  ($1) and ($2)',[33,36] );
+        const response = await pool.query(`SELECT * FROM reportes WHERE estado=TRUE and empresas like '%ASISTIDA%'`);
+        //const response = await pool.query('SELECT * FROM reportes where id between  ($1) and ($2)',[33,36] );
     if (res !== undefined) {
         return res.json(response.rows);
         pool.close();

@@ -21,8 +21,10 @@ import { switchMap } from 'rxjs/operators';
 })
 export class ReporteComponent implements OnInit {
 
-  displayedColumns = ['id', 'nombre', 'descarga', 'acciones'];
+  displayedColumns = ['serial', 'nombre', 'acciones'];
   dataSource !: MatTableDataSource<Reportes>;
+  @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
 
   mensaje !: string;
@@ -57,52 +59,20 @@ export class ReporteComponent implements OnInit {
 
     
      this.reporteService.listar().subscribe(data => {
-      console.log(data)
       this.dataSource = new MatTableDataSource(data);
+      this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
     
-    });
-
-    
+    });   
    
+    }
+
+
+ 
+  filtro(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
-
-  cambioTexto(mensaje: any){
-    this.reporteService.enviarmensaje(mensaje);
-    console.log("llega mensaje"+mensaje)
-
-  }
-
-  cambieFecha(e: any) {
-    console.log(e);
-    this.reporteService.enviarmensaje(e);
-  } 
-
-
-  aceptar(){
-    /*console.log(this.fechaSeleccionada.toISOString()); //UTC/*console.log(this.fechaSeleccionada.toISOString()); //UTC
-    let tzoffset = (new Date()).getTimezoneOffset() * 60000;
-    let localISOTime = (new Date(this.fechaSeleccionada.getTime() - tzoffset)).toISOString();    
-    console.log(localISOTime);*/
-
-    this.nombrepadre="Jaime Velez";
-    console.log(this.nombrepadre);
-    this.campana="2832";
-    const cities= {fecha:this.fechaSeleccionada,fechafin:this.campana}
-    console.log(cities);
-    //this.reporteService.disparadorreportes.emit(this.fechaSeleccionada);
-    this.reporteService.disparadorreportes.emit(cities);
-  }
-
-
-  /*cambiarnombre(){
-    this.nombrepadre="Jaime Velez";
-  }*/
-
-
-
-
-
-
    
 }
 

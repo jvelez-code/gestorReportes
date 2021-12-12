@@ -20,6 +20,12 @@ import { VisualizarComponent } from './pages/reporte/visualizar/visualizar.compo
 import { DetalleGestionComponent } from './pages/reporte/detalle-gestion/detalle-gestion.component';
 import { TmpEntranteComponent } from './pages/reporte/tmp-entrante/tmp-entrante.component';
 import { LlamadasFueraComponent } from './pages/reporte/llamadas-fuera/llamadas-fuera.component';
+import { MonitoreoComponent } from './pages/monitoreo/monitoreo/monitoreo.component';
+import { LoginComponent } from './pages/login/login.component';
+
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
+
 
 
 
@@ -33,7 +39,9 @@ import { LlamadasFueraComponent } from './pages/reporte/llamadas-fuera/llamadas-
     VisualizarComponent,
     DetalleGestionComponent,
     TmpEntranteComponent,
-    LlamadasFueraComponent
+    LlamadasFueraComponent,
+    MonitoreoComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -43,7 +51,9 @@ import { LlamadasFueraComponent } from './pages/reporte/llamadas-fuera/llamadas-
     MaterialModule,
     ReactiveFormsModule,
     FormsModule,
-    MatInputModule
+    MatInputModule,
+    NoopAnimationsModule,
+    SocketIoModule.forRoot(config)
   ],
   providers: [],
   bootstrap: [AppComponent]

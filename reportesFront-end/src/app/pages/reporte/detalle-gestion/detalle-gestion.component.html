@@ -1,11 +1,9 @@
-<mat-toolbar>Consultar Reportes</mat-toolbar>
+<mat-toolbar>Consulta Reporte {{reported}}</mat-toolbar>
   <router-outlet></router-outlet>
-
-
-<!--<div [hidden]="route.children.length !== 0">-->
-
+  
  <div class="example-containe mat-elevation-z8">
    <form method="POST">
+     
 <div>
     <mat-form-field class="example-form-field" appearance="fill">
       <mat-label>First campaign</mat-label>
@@ -14,8 +12,8 @@
         [rangePicker]="campaignOnePicker"
         [comparisonStart]="campaignTwo.value.start"
         [comparisonEnd]="campaignTwo.value.end">
-        <input matStartDate placeholder="Start date" formControlName="start" [(ngModel)]="fechaSeleccionada">
-        <input matEndDate placeholder="End date" formControlName="end" [(ngModel)]="fechaSeleccionadas">
+        <input matStartDate placeholder="Start date" formControlName="start" [(ngModel)]="fechaInicio">
+        <input matEndDate placeholder="End date" formControlName="end" [(ngModel)]="fechaFin">
       </mat-date-range-input>
       <mat-datepicker-toggle matSuffix [for]="campaignOnePicker"></mat-datepicker-toggle>
       <mat-date-range-picker #campaignOnePicker></mat-date-range-picker>
@@ -23,55 +21,44 @@
   </div>
 
   <div>
-    <mat-form-field appearance="fill">
-      <mat-label>Input & change events</mat-label>
-      <input matInput [matDatepicker]="picker"
-             (dateInput)="addEvent('input', $event)" (dateChange)="addEvent('change', $event)">
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
-    </mat-form-field>
-  </div>
-    
-    <div class="example-events">
-      <div *ngFor="let e of events">{{e}}</div>
-    </div>
-   
-
-  <div>
     <button mat-raised-button color="primary" (click)="aceptar()">Aceptar</button>
   </div>
   </form>
 </div>
-<div>
-  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-    <!--- Note that these columns can be defined in any order.
-          The actual rendered columns are set as a property on the row definition" -->
-  
-    <!-- Position Column -->
-    <ng-container matColumnDef="id_gestion">
-      <th mat-header-cell *matHeaderCellDef> No. </th>
-      <td mat-cell *matCellDef="let element"> {{element.id_gestion}} </td>
+
+  <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8" >
+
+    <ng-container matColumnDef="campana">
+      <th mat-header-cell *matHeaderCellDef> CAMPAÑA </th>
+      <td mat-cell *matCellDef="let element"> {{element.nombrecampana}} </td>
     </ng-container>
   
     <!-- Name Column -->
-    <ng-container matColumnDef="id_campana">
-      <th mat-header-cell *matHeaderCellDef> Name </th>
-      <td mat-cell *matCellDef="let element"> {{element.id_campana}} </td>
+    <ng-container matColumnDef="tipo">
+      <th mat-header-cell *matHeaderCellDef> TIPO DOC </th>
+      <td mat-cell *matCellDef="let element"> {{element.tipodocaportante}} </td>
     </ng-container>
   
     <!-- Weight Column -->
-    <ng-container matColumnDef="id_agente">
-      <th mat-header-cell *matHeaderCellDef> Weight </th>
-      <td mat-cell *matCellDef="let element"> {{element.id_agente}} </td>
+    <ng-container matColumnDef="documento">
+      <th mat-header-cell *matHeaderCellDef> DOCUMENTO </th>
+      <td mat-cell *matCellDef="let element"> {{element.numdocaporta}} </td>
     </ng-container>
   
     <!-- Symbol Column -->
-    <ng-container matColumnDef="fecha_gestion">
-      <th mat-header-cell *matHeaderCellDef> Symbol </th>
-      <td mat-cell *matCellDef="let element"> {{element.fecha_gestion| date:"yyyy-MM-dd" }} </td>
+    <ng-container matColumnDef="razonSocial">
+      <th mat-header-cell *matHeaderCellDef> RAZÓN SOCIAL </th>
+      <td mat-cell *matCellDef="let element"> {{element.razonsocial}} </td>
     </ng-container>
+    
   
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>    
   </table>
-</div>
+
+
+
+
+
+<mat-paginator [pageSize]="10" [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
+
